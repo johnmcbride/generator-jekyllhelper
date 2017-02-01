@@ -8,6 +8,8 @@ module.exports = yeoman.Base.extend({
  initializing: function()
   {
     this.log(yosay('Welcome to the jekyll helper for blog posts.'));
+    var currentDate = new Date();
+    this.fileNameDate = dateFormat(currentDate,"yyyy-mm-dd-hh-MM-ss");
   },
   prompting: function() {
     return this.prompt([{
@@ -24,6 +26,12 @@ module.exports = yeoman.Base.extend({
     },
     {
       type    : 'input',
+      name    : 'postFileDate',
+      message : 'Enter the date for the post',
+      default : this.fileNameDate
+    },
+    {
+      type    : 'input',
       name    : 'postTags',
       message : 'Enter the tags for your post',
       default : ''
@@ -34,10 +42,7 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
   writing: function () {
-    //get the date
-    var currentDate = new Date();
-    var fileName = dateFormat(currentDate,"yyyy-dd-mm-hh-MM-ss");
-    fileName = fileName + '.md';
+    var fileName = this.fileNameDate + '.md';
     console.log(fileName);
      this.fs.copyTpl(
       this.templatePath('_post.md'),
